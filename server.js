@@ -106,43 +106,4 @@ User question: ${question || "Read and solve the attached image."}`
       });
     }
 
-    const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
-
-    const url =
-      `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;
-
-    const data = await askGemini(url, key, {
-      contents: [{ role: "user", parts }],
-      generationConfig: {
-        temperature: 0.4,
-        maxOutputTokens: 2048
-      }
-    });
-
-    const answer = (data.candidates?.[0]?.content?.parts || [])
-      .map(part => part.text || "")
-      .join("")
-      .trim();
-
-    if (!answer) {
-      return res.status(502).json({
-        error: "AI returned no text. Please try again."
-      });
-    }
-
-    return res.json({ answer });
-
-  } catch (error) {
-    console.error("SHIV AI error:", error.message);
-
-    return res.status(502).json({
-      error: "SHIV AI could not get an answer: " + error.message
-    });
-  }
-});
-
-const port = process.env.PORT || 3000;
-
-app.listen(port, "0.0.0.0", () => {
-  console.log("SHIV AI listening on " + port);
-});
+    const model = process.env.GEMINI_MODEL || "gemini-2.5-flash"
